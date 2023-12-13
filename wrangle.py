@@ -23,9 +23,19 @@ def wrangle_zillow():
     df = pd.read_sql(query, url)
 
     # Clean the data
+    df = df.rename(columns={'bedroomcnt': 'bedrooms',
+                            'bathroomcnt': 'bathrooms',
+                            'calculatedfinishedsquarefeet': 'area',
+                            'taxvaluedollarcnt': 'taxvalue',
+                            'fips': 'county'})
     df = df.dropna()
-    cols_to_convert = ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet', 'taxvaluedollarcnt', 'yearbuilt', 'fips']
-    df[cols_to_convert] = df[cols_to_convert].astype(int)
+
+    make_ints = ['bedrooms', 'area', 'taxvalue', 'yearbuilt']
+
+    for col in make_ints:
+        df[col] = df[col].astype(int)
+
+    df.county = df.county.map({6037:'LA',6059:'Orange',6111:'Ventura'})
 
     # Split the data
     train, validate_test = train_test_split(df, train_size=0.6, random_state=123)
