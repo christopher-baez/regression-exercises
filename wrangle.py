@@ -26,11 +26,12 @@ def wrangle_zillow():
     df = df.rename(columns={'bedroomcnt': 'bedrooms',
                             'bathroomcnt': 'bathrooms',
                             'calculatedfinishedsquarefeet': 'area',
-                            'taxvaluedollarcnt': 'taxvalue',
-                            'fips': 'county'})
+                            'taxvaluedollarcnt': 'appraisal',
+                            'fips': 'county',
+                            'taxamount': 'tax'})
     df = df.dropna()
 
-    make_ints = ['bedrooms', 'area', 'taxvalue', 'yearbuilt']
+    make_ints = ['bedrooms', 'area', 'yearbuilt']
 
     for col in make_ints:
         df[col] = df[col].astype(int)
